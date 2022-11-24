@@ -12,7 +12,7 @@ import (
 	"os"
 	"strconv"
 	
-	"github.com/nxadm/tail"
+	"github.com/mr-pmillz/tail"
 )
 
 type jsonStruct struct {

@@ -17,8 +17,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nxadm/tail/ratelimiter"
-	"github.com/nxadm/tail/watch"
+	"github.com/mr-pmillz/tail/ratelimiter"
+	"github.com/mr-pmillz/tail/watch"
 )
 
 func TestTailFile(t *testing.T) {
@@ -64,6 +64,23 @@ func TestMustExist(t *testing.T) {
 		t.Error("MustExist:true on an existing file is violated")
 	}
 	tail.Cleanup()
+}
+
+// This test is not very robust because its purpose is to test that a race
+// condition doesn't exist. As such, the failure pattern of this test would
+// be flaky failure, not necessarily easily reproduced failure.
+//
+// Running this same test *without* SyncOpen: true, alongside
+// stress --hdd 8 (to make the filesystem very busy), will fail most
+// of the time. (It fails significantly even without stress.)
+func TestSeeksSynchronously(t *testing.T) {
+	tailTest, cleanup := NewTailTest("seeks-synchronously", t)
+	defer cleanup()
+	tailTest.CreateFile("test.txt", "hello\nworld\n")
+	tail := tailTest.StartTail("test.txt", Config{SyncOpen: true, Location: &SeekInfo{0, io.SeekEnd}})
+	go tailTest.VerifyTailOutput(tail, []string{"more", "data"}, false)
+	tailTest.AppendToFile("test.txt", "more\ndata\n")
+	tailTest.Cleanup(tail, true)
 }
 
 func TestWaitsForFileToExist(t *testing.T) {

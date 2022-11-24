@@ -6,7 +6,7 @@ package tail
 import (
 	"os"
 
-	"github.com/nxadm/tail/winfile"
+	"github.com/mr-pmillz/tail/winfile"
 )
 
 // Deprecated: this function is only useful internally and, as such,

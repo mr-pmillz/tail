@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 If you sent an issue/PR to hpcloud, you can have a look at
-[this meta issue](https://github.com/nxadm/tail/issues/6) tracking issues
+[this meta issue](https://github.com/mr-pmillz/tail/issues/6) tracking issues
 and PRs of the dormant upstream. However, as the code bases diverge the
 issue may have been solved already.
 
